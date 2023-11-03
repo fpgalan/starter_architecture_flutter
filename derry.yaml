@@ -1,0 +1,38 @@
+# CODE GENERATION
+gen: dart run build_runner build --delete-conflicting-outputs
+
+watch: dart run build_runner watch
+
+genw:
+  - derry gen
+  - derry watch
+
+# FILES
+clean:
+  - flutter clean
+  - flutter pub get
+
+pod-ios:
+  - cd ios && pod update && pod install
+
+pod-macos:
+  - cd macos && pod update && pod install
+
+pod:
+  - derry pod-ios
+  - derry pod-macos
+  - derry clean
+
+# BUILDS
+build_ios:
+  - derry pod
+  - flutter build ipa -t lib/main_production.dart
+
+build_android:
+  - derry clean
+  - flutter build appbundle -t lib/main_production.dart
+
+build_android_test:
+  - derry clean
+  - flutter build apk -t lib/main_staging.dart
+
